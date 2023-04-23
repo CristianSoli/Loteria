@@ -1,7 +1,7 @@
 
 //Variables globales
 var miCarta = document.getElementById("mi-carta");
-var tiempoCarta = 100;
+var tiempoCarta = 1000;
 var direccionCartas = [];
 var i = 0;
 var percent = 0;
