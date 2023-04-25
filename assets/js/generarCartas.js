@@ -1,10 +1,11 @@
 
 //Variables globales
 var miCarta = document.getElementById("mi-carta");
-var tiempoCarta = 1000;
+var tiempoCarta = 2000;
 var direccionCartas = [];
 var i = 0;
 var percent = 0;
+var banderaBoton = 0;
 
 //Constantes
 const progressBar = document.querySelector('.barra-progresiva');
@@ -25,32 +26,48 @@ for (let i = 1; i <= 54; i++) {
 
 
 //Recorre el arreglo para mostrar la carta
-cartaPorTiempo = setInterval(function() {
-    if (i <= direccionCartas.length - 1) {
-
+function recorrerCartas(){
+        cartaPorTiempo = setInterval(function() {
         //El valor de la direccion sera igual al arreglo de las direcciones en la posicion del indice
         miCarta.src = numerosAleatorios[i];
 
-        // Crear un elemento img
-        const imgElement = document.createElement("img");
+        if(i != 0){
+          // Crear un elemento img
+          const imgElement = document.createElement("img");
+          // Establecer el atributo "src" de la imagen y su altura
+          imgElement.setAttribute("src", `${numerosAleatorios[i -1]}`);
+          imgElement.setAttribute("height", "140px");
+          // Agregar el elemento imagen al contenedor contenedor-imagen
+          imageContainer.appendChild(imgElement);
+          
+          
 
-        // Establecer el atributo "src" de la imagen y su altura
-        imgElement.setAttribute("src", `${numerosAleatorios[i]}`);
-        imgElement.setAttribute("height", "140px");
-
-        // Agregar el elemento imagen al contenedor contenedor-imagen
-        imageContainer.appendChild(imgElement);
-
+          
+        }
+        if (i <= direccionCartas.length - 1) {
+        
         //Calcula el porcentaje de la barra
         percent = ((100*i)/(direccionCartas.length - 1));
 
         //Cambia el porcentaje de la barra progresiva
         progressBar.style.width = `${percent}%`;
+        i++;
+        }
+        else{
+          //Deja fija la ultima carta
+          miCarta.src = numerosAleatorios[numerosAleatorios.length - 1] ;
 
-    }
+          //Detiene el intervalo en el que se muestran las cartas
+          clearInterval(cartaPorTiempo);
+        }
+        
+      }, tiempoCarta);
+}   
+  
+
     
-    i++;
-}, tiempoCarta);
+      
+    
 
 //Funcion para ordenar las cartas aleatoriamente
 function ordenarAleatorio(array) {
@@ -65,8 +82,17 @@ function ordenarAleatorio(array) {
 }
 
 recargarPagina.addEventListener("click", function() {
-    location.reload();
-  });
+
+    if(banderaBoton != 1) {
+      recorrerCartas();
+      banderaBoton = 1;
+      recargarPagina.innerHTML = `reiniciar`
+    }
+    
+    else{
+      location.reload();
+    }
+});
 
 ordenarAleatorio(direccionCartas);
 
